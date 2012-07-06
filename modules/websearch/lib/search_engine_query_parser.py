@@ -1042,7 +1042,7 @@ class SpiresToInvenioSyntaxConverter:
 
     def _create_author_search_pattern_from_fuzzy_name_dict(self, fuzzy_name):
         """Creates an invenio search pattern for an author from a fuzzy name dict"""
-
+        
         author_name = ''
         author_middle_name = ''
         author_surname = ''
@@ -1092,6 +1092,9 @@ class SpiresToInvenioSyntaxConverter:
         if NAME_IS_NOT_INITIAL:
             for i in range(1,len(author_name)):
                 search_pattern += ' or ' + self._EA_TAG + "\"%s, %s\"" % (author_surname, author_name[0:i])
+
+            if not author_middle_name:
+                search_pattern +=  ' or ' + self._A_TAG + '"' + author_surname + ', ' + author_name[0] + ' *"'
 
         search_pattern += ' or %s"%s, *"' % (self._A_TAG, full_search)
 
