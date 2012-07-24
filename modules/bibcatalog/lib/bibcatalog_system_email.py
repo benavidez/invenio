@@ -41,18 +41,20 @@ if hasattr(invenio.config, 'CFG_BIBCATALOG_SYSTEM') and invenio.config.CFG_BIBCA
 
 
 class BibCatalogSystemEmail(BibCatalogSystem):
-
     #BIBCATALOG_RT_SERVER = "" #construct this by http://user:password@RT_URL
 
     def check_system(self, uid=None):
         """return an error string if there are problems"""
-        # TODO: look at RT example and implement by checking 
-        #       EMAIL_SUBMIT_CONFIGURED and returning whatever is expected
-        pass
+        
+        ret = ''
+        if not EMAIL_SUBMIT_CONFIGURED:
+            ret  = "Please configure bibcatalog email sending in CFG_BIBCATALOG_SYSTEM and CFG_BIBCATALOG_SYSTEM_TICKETS_EMAIL"
+        return ret
 
     def ticket_search(self, uid, recordid=-1, subject="", text="", creator="", owner="", \
                       date_from="", date_until="", status="", priority="", queue=""):
         """Not implemented."""
+
         raise NotImplementedError
 
     def ticket_submit(self, uid=None, subject="", recordid=-1, text="", queue="", priority="", owner="", requestor=""):
@@ -64,66 +66,61 @@ class BibCatalogSystemEmail(BibCatalogSystem):
                                prefix="please configure bibcatalog email sending in CFG_BIBCATALOG_SYSTEM and CFG_BIBCATALOG_SYSTEM_TICKETS_EMAIL")
 
         ticket_id = self._get_ticket_id()
-        ###### TODO: massage these variables below, then include them in the
-        ######       body of the email that we send further below
-        #priorityset = ""
-        #queueset = ""
-        #requestorset = ""
-        #ownerset = ""
-        #recidset = " CF-RecordID=" + escape_shell_arg(str(recordid))
+        priorityset = ""
+        queueset = ""
+        requestorset = ""
+        ownerset = ""
+        recidset = " cf-recordID:" + escape_shell_arg(str(recordid)) + '\n'
         textset = ""
         subjectset = ""
         if subject:
             subjectset = 'ticket #' + ticket_id + ' - ' + escape_shell_arg(subject)
-        ###### TODO: massage the variables from above, so we can include them
-        ######       in the body of the email that we send further below
-        #if priority:
-        #    priorityset = " priority=" + escape_shell_arg(str(priority))
-        #if queue:
-        #    queueset = " queue=" + escape_shell_arg(queue)
-        #if requestor:
-        #    requestorset = " requestor=" + escape_shell_arg(requestor)
-        #if owner:
-        #    #get the owner name from prefs
-        #    ownerprefs = invenio.webuser.get_user_preferences(owner)
-        #    if ownerprefs.has_key("bibcatalog_username"):
-        #        owner = ownerprefs["bibcatalog_username"]
-        #        ownerset = " owner=" + escape_shell_arg(owner)
+        if priority:
+            priorityset = " priority:" + escape_shell_arg(str(priority)) + '\n'
+        if queue:
+            queueset = " queue:" + escape_shell_arg(queue) + '\n'
+        if requestor:
+            requestorset = " requestor:" + escape_shell_arg(requestor) + '\n'
+        if owner:
+            ownerprefs = invenio.webuser.get_user_preferences(owner)
+            if ownerprefs.has_key("bibcatalog_username"):
+                owner = ownerprefs["bibcatalog_username"]
+            ownerset = " owner:" + escape_shell_arg(owner) + '\n'
 
-        textset = escape_shell_arg(text)
+        textset = textset + ownerset + requestorset + recidset + queueset + priorityset + '\n'
 
-        ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n', content=textset)
+        textset = textset + escape_shell_arg(text) + '\n'
+
+        ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n\n', content=textset)
         if ok:
             return ticket_id
         return None
 
     def ticket_comment(self, uid, ticketid, comment):
-        """comment on a given ticket. Returns 1 on success, 0 on failure"""
-        # TODO: implement
-        pass
+        """Not implemented."""
+
+        raise NotImplementedError
 
     def ticket_assign(self, uid, ticketid, to_user):
-        """assign a ticket to an RT user. Returns 1 on success, 0 on failure"""
-        # TODO: implement
-        pass
+        """Not implemented."""
+
+        raise NotImplementedError
 
     def ticket_set_attribute(self, uid, ticketid, attribute, new_value):
-        """change the ticket's attribute. Returns 1 on success, 0 on failure"""
-        # TODO: figure out what this means by looking at RT implementation,
-        #       decide whether to implement; raise NotImplemented if not
-        pass
+        """Not implemented."""
+
+        raise NotImplementedError
 
     def ticket_get_attribute(self, uid, ticketid, attribute):
-        # TODO: raise NotImplemented
-        pass
+        """Not implemented."""
+
+        raise NotImplementedError
 
     def ticket_get_info(self, uid, ticketid, attributes = None):
-        """return ticket info as a dictionary of pre-defined attribute names.
-           Or just those listed in attrlist.
-           Returns None on failure"""
-        # TODO: raise NotImplemented
-        pass
-    
+        """Not implemented."""
+
+        raise NotImplementedError
+
     def _str_base(self, num, base, numerals = '0123456789abcdefghijklmnopqrstuvwxyz'):
         """ Convert number to base (2 to 36) """
 

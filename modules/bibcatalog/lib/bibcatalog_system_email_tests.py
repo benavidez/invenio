@@ -32,7 +32,7 @@ class BibCatalogSystemEmailTest(unittest.TestCase):
         self.email = bibcatalog_system_email.BibCatalogSystemEmail()
         # TODO: fudging the email address is the right thing, but fudge with
         # a different one - try CFG_SITE_SUPPORT_EMAIL or so
-        bibcatalog_system_email.CFG_BIBCATALOG_SYSTEM_TICKETS_EMAIL = 'eduardo.benavidez@yahoo.com'
+        bibcatalog_system_email.CFG_BIBCATALOG_SYSTEM_TICKETS_EMAIL = 'eduardob@slac.stanford.edu'
         bibcatalog_system_email.CFG_BIBCATALOG_SYSTEM = 'EMAIL'
         pass
 
@@ -50,9 +50,18 @@ class BibCatalogSystemEmailTest(unittest.TestCase):
         """bibcatalog_system_email - test creating ticket via email"""
 
         # TODO: our return values are ticket id or none; check both cases
-        self.assertTrue(self.email.ticket_submit(subject="Issue with RT", text="The RT system is not as good as the email ticketing"))
+        self.assertTrue(self.email.ticket_submit(subject="Issue with RT", text="The RT system is not as good as the email ticketing", owner='eduardo', priority=3, queue='TEST', requestor='Joeb', recordid=100))
 
-    # TODO: implement tests for the other methods we should implement
+    def test_ckeck_system(self):
+        """bibcatalog_system_email - check_system returns true if succesfull, a message otherwise"""
+
+        self.assertEqual(self.email.check_system(), '')
+
+
+    def test_ticket_get_info(self): 
+        """bibcatalog_system_email - ticket_get_info raises NotImplementedError exception"""
+
+        self.assertRaises(NotImplementedError, self.email.ticket_get_info, uid=1, ticketid=0)
 
 
 
