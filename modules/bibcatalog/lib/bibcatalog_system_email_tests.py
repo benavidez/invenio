@@ -62,6 +62,11 @@ class BibCatalogSystemEmailTest(unittest.TestCase):
 
         self.assertTrue(self.email.ticket_assign(uid=1, ticketid='d834bnklca', to_user='jrbl'))
     
+    def test_ticket_set_attribute_via_email(self):
+        """bibcatalog_system_email - test setting attribute on ticket via email"""
+
+        self.assertTrue(self.email.ticket_set_attribute(uid=1, ticketid='d834bnklca', attribute='priority', new_value='1'))
+
     def test_ckeck_system(self):
         """bibcatalog_system_email - check_system returns true if succesfull, a message otherwise"""
 

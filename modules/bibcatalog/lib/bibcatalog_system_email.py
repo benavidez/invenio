@@ -99,7 +99,7 @@ class BibCatalogSystemEmail(BibCatalogSystem):
     def ticket_comment(self, uid, ticketid, comment):
         """ Comment on ticket with given ticketid"""
         
-        subjectset = 'ticket #' + ticketid + ' - ...'
+        subjectset = 'ticket #' + ticketid + ' - Comment ...'
         textset    = '...\n\n*Comment on ticket #' + ticketid + '\nComment:' + comment 
         ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n\n', content=textset)
         if ok:
@@ -117,11 +117,15 @@ class BibCatalogSystemEmail(BibCatalogSystem):
             return 1
         return 0
 
-
     def ticket_set_attribute(self, uid, ticketid, attribute, new_value):
-        """Not implemented."""
-
-        raise NotImplementedError
+        """ Request to set attribute to new value on ticket with given ticketid"""
+        
+        subjectset = 'ticket #' + ticketid + ' - Attribute Update ...'
+        textset    = '...\n\n*Please modify attribute:' + attribute + ' to:' + new_value + ' on ticket:' + ticketid 
+        ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n\n', content=textset)
+        if ok:
+            return 1
+        return 0
 
     def ticket_get_attribute(self, uid, ticketid, attribute):
         """Not implemented."""
