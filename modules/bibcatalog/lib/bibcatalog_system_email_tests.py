@@ -51,7 +51,17 @@ class BibCatalogSystemEmailTest(unittest.TestCase):
 
         # TODO: our return values are ticket id or none; check both cases
         self.assertTrue(self.email.ticket_submit(subject="Issue with RT", text="The RT system is not as good as the email ticketing", owner='eduardo', priority=3, queue='TEST', requestor='Joeb', recordid=100))
+    
+    def test_ticket_comment_via_email(self):
+        """bibcatalog_system_email - test commention on ticket via email"""
 
+        self.assertTrue(self.email.ticket_comment(uid=1, ticketid='d834bnklca', comment='Eduardo is commenting on ticket blah, blah, blah'))
+    
+    def test_ticket_assign_via_email(self):
+        """bibcatalog_system_email - test commention on ticket via email"""
+
+        self.assertTrue(self.email.ticket_assign(uid=1, ticketid='d834bnklca', to_user='jrbl'))
+    
     def test_ckeck_system(self):
         """bibcatalog_system_email - check_system returns true if succesfull, a message otherwise"""
 

@@ -97,14 +97,26 @@ class BibCatalogSystemEmail(BibCatalogSystem):
         return None
 
     def ticket_comment(self, uid, ticketid, comment):
-        """Not implemented."""
+        """ Comment on ticket with given ticketid"""
+        
+        subjectset = 'ticket #' + ticketid + ' - ...'
+        textset    = '...\n\n*Comment on ticket #' + ticketid + '\nComment:' + comment 
+        ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n\n', content=textset)
+        if ok:
+            return 1
+        return 0
 
-        raise NotImplementedError
 
     def ticket_assign(self, uid, ticketid, to_user):
-        """Not implemented."""
+        """ Re-assign existing ticket with given ticketid to user to_user"""
+        
+        subjectset = 'ticket #' + ticketid + ' - Re-assign ...'
+        textset    = '...\n\n*Please re-assigning ticket #' + ticketid + ' to ' + to_user 
+        ok = send_email(fromaddr=FROM_ADDRESS, toaddr=TO_ADDRESS, subject=subjectset, header='Hello,\n\n', content=textset)
+        if ok:
+            return 1
+        return 0
 
-        raise NotImplementedError
 
     def ticket_set_attribute(self, uid, ticketid, attribute, new_value):
         """Not implemented."""
